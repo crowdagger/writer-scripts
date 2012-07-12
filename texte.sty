@@ -1,0 +1,150 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Classe utilisée pour des nouvelles, romans, etc. Basiquement, elle
+% fournit une page de garde un peu plus jolie que le \maketitle de
+% base, et ajoute la commande \separateur qui permet de séparer deux
+% paragraphes par des *******.
+%
+% Copyright (C) Élisabeth Henry <liz.henry@ouvaton.org>
+%
+% Vous pouvez utiliser, modifier et redistribuer ce fichier sans
+% aucune restriction.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Utilisation
+%
+% L'utilisation se fait normalement sans difficulté : 
+%
+% \documentclass{livre}
+% \documentclass{nouvelle}
+%
+% Avec les classiques \author, \title, etc.
+%
+% Quelques commandes ont été ajoutées : 
+%
+% \separateur : sépare deux paragraphes avec des *****
+% \extrait[auteur]{citation} : citation un peu jolie.
+% \flash{texte} : affiche un texte entre parenthèses pour montrer un
+%     flashback, la pensée d'un personnage, etc.
+% \dire{} : pour faire parler les persos. Évite ainsi d'avoir à tout
+%     changer à la main si on doit changer << en \og, par exemple ;)
+% \expr{} : pour les expressions. Même principe que ci-dessus. Par
+%     défaut met l'expression en «».
+%
+% Attention : la compilation nécessite PDFLaTeX.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Bibliothèques
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NeedsTeXFormat{LaTeX2e}[1998/12/01]
+\ProvidesFile{texte.sty}[2007/07/01 v0.5 Package facilitant la création
+d'une présentation adaptée à une nouvelle ou à un roman]
+
+\RequirePackage{ifthen}
+\RequirePackage{fancyhdr}
+\RequirePackage[english,francais]{babel}
+\selectlanguage{francais}
+\RequirePackage[latin1]{inputenc}
+\RequirePackage[cyr]{aeguill}
+\RequirePackage{multicol}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Mise en page 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% En-tetes
+\pagestyle{fancyplain} 
+%En-tete gauche [paire]{impaire}
+\lhead[\fancyplain{}{\rm\thepage}]{\fancyplain{}{\rm \@author}}
+%En-tete droite
+\rhead[\fancyplain{}{\rm \@author}]{\fancyplain{}{\rm\thepage}}
+%En-tete centre
+\chead[\fancyplain{}{\sl \@title}]
+{\fancyplain{}{\sl {\@title}}}
+%Pied de page
+\cfoot{\fancyplain{}{}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% (re)définition de commandes
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Commande pour avoir le titre et le rédéfinir
+\newcommand{\theserietitle}{}
+
+\newcommand{\serietitle}[1]
+{
+  \renewcommand{\theserietitle}{#1 \\[5mm]}
+}
+
+% Commande pour les citations : \extrait{auteur}{citation}
+\newcommand{\extrait}[2]
+{
+  \begin{flushright}
+    {
+      \itshape
+      #2
+    }
+    (#1)
+  \end{flushright}
+
+  \paragraph{}
+}
+
+
+% Commande pour les phases ou le protagoniste délire, flashback, etc. 
+\newcommand{\flash}[1]
+{
+  \paragraph{}
+  {
+    \itshape
+    (#1)
+  }
+  \paragraph{}
+}
+
+% Commande pour faire parler un personnage («...») : en gros, il faut
+% utiliser \dire{...} pour un personnage, et surtout ne pas oublier de
+% mettre les tirets (---) (et retour à la ligne) pour plusieurs
+% intervenants. 
+\newcommand{\dire}[1]
+{
+  \og #1 \fg
+}
+
+
+% Commande pour insérer une expression. Par défaut, semblable à
+% \dire{}, mais l'intérêt d'utiliser ça est que cela peut facilement
+% être changé, par exemple pour être en italique à la place ou avec
+% d'autres guillemets.
+\newcommand{\expr}[1]
+{\og #1 \fg}
+
+% Ligne horizontale
+\newcommand{\HRule}{\rule{\linewidth}{1mm}}
+
+% Séparateur de paragaphes
+\newcommand{\separateur}{
+  \paragraph{}
+  \begin{center}
+    *****
+  \end{center}
+  \paragraph{}
+}
+
+
+
